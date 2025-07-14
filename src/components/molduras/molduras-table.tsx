@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Frame, Edit, Trash2 } from "lucide-react"
-import type { MolduraCompleta } from "../../types/molduras"
+import { MolduraCompleta } from "@/modules/molduras/types/moluras"
 
 interface MoldurasTableProps {
   currentData: MolduraCompleta[]
