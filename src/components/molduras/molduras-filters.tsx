@@ -5,8 +5,8 @@ import type React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { MolduraFilters } from "../../types/molduras"
-import { gruposData } from "../../modules/auth/services/gruposData"
+import { MolduraFilters } from "@/modules/molduras/types/moluras"
+import { gruposData } from "@/modules/grupos/data/gruposData"
 
 
 interface MoldurasFiltersProps {
