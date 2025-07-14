@@ -10,8 +10,8 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { Upload, RotateCw } from "lucide-react"
-import type { NovamolduraForm } from "../../types/molduras"
-import { gruposData } from "../../modules/auth/services/gruposData"
+import { NovamolduraForm } from "@/modules/molduras/types/moluras"
+import { gruposData } from "@/modules/grupos/data/gruposData"
 
 interface NovaMolduraModalProps {
   isOpen: boolean
