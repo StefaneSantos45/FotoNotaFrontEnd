@@ -57,8 +57,8 @@ export default function Sidebar({
     }
   }, [user])
 
-  const isActive = (path: string) => pathname === path || pathname.startsWith(path + "/")
-
+  const isActive = (path: string) =>
+  pathname === path || (typeof pathname === "string" && pathname.startsWith(path + "/"))
   const toggleExpand = (key: string) => {
     setExpanded(expanded === key ? null : key)
   }

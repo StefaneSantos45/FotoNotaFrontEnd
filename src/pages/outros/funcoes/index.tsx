@@ -5,9 +5,9 @@ import { Search, Filter, Eye } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { funcoesMock } from "@/data/mock-data"
-import type { Funcao } from "@/types/funcoes"
 import { PermissionGuard } from "@/components/auth/permission-guard"
+import { Funcao } from "@/modules/funcoes/types/funcoes"
+import { funcoesMock } from "@/modules/funcoes/data/funcoesMock"
 
 export default function FuncoesPage() {
   const [searchTerm, setSearchTerm] = useState("")

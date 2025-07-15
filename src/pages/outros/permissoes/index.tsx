@@ -11,9 +11,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { usePermissions } from "../../../../hooks/use-permissions"
-import { permissionCategories } from "@/data/permissions-data"
-import type { Permission } from "@/types/permissions"
+import { Permission } from "@/modules/permissoes/types/permissions"
+import { usePermissions } from "@/modules/permissoes/hooks/use-permissions"
+import { permissionCategories } from "@/modules/permissoes/data/permissions-data"
 
 const categoryIcons = {
   Users,

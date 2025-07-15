@@ -9,6 +9,9 @@ import { useAvisos } from "../../../../modules/avisos/hooks/useAvisos"
 import NivelBadge from "../../../../modules/avisos/components/NivelBadge"
 import type { Aviso } from "../../../../modules/avisos/types"
 
+// 👇 evita erro de build por rota dinâmica
+export const dynamic = "force-dynamic"
+
 export default function AvisoDetalhesPage() {
   const router = useRouter()
   const params = useParams()
@@ -18,20 +21,23 @@ export default function AvisoDetalhesPage() {
 
   useEffect(() => {
     const fetchAviso = async () => {
-      if (params.id) {
+      const avisoId = params?.id?.toString()
+      if (avisoId) {
         try {
-          const avisoData = await getAvisoById(params.id as string)
+          const avisoData = await getAvisoById(avisoId)
           setAviso(avisoData)
         } catch (error) {
           console.error("Erro ao carregar aviso:", error)
         } finally {
           setLoading(false)
         }
+      } else {
+        setLoading(false)
       }
     }
 
     fetchAviso()
-  }, [params.id, getAvisoById])
+  }, [params?.id, getAvisoById])
 
   if (loading) {
     return (
@@ -56,7 +62,6 @@ export default function AvisoDetalhesPage() {
   const getTipoIcon = (tipo: string) => {
     switch (tipo) {
       case "quiosque offline":
-        return AlertTriangle
       case "printTimeError":
         return AlertTriangle
       case "quiosqueFreeze":
@@ -104,7 +109,6 @@ export default function AvisoDetalhesPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Quiosque */}
             <div className="flex items-center justify-between py-4 border-b border-slate-100">
               <div className="flex items-center space-x-3">
                 <User className="w-5 h-5 text-slate-500" />
@@ -113,7 +117,6 @@ export default function AvisoDetalhesPage() {
               <span className="text-pink-600 font-semibold text-lg">{aviso.quiosqueNome}</span>
             </div>
 
-            {/* Sessão */}
             <div className="flex items-center justify-between py-4 border-b border-slate-100">
               <div className="flex items-center space-x-3">
                 <Info className="w-5 h-5 text-slate-500" />
@@ -126,7 +129,6 @@ export default function AvisoDetalhesPage() {
               )}
             </div>
 
-            {/* Tipo */}
             <div className="flex items-center justify-between py-4 border-b border-slate-100">
               <div className="flex items-center space-x-3">
                 <TipoIcon className="w-5 h-5 text-slate-500" />
@@ -135,7 +137,6 @@ export default function AvisoDetalhesPage() {
               <span className="text-slate-800 font-medium">{aviso.tipo}</span>
             </div>
 
-            {/* Nível */}
             <div className="flex items-center justify-between py-4 border-b border-slate-100">
               <div className="flex items-center space-x-3">
                 <AlertTriangle className="w-5 h-5 text-slate-500" />
@@ -144,7 +145,6 @@ export default function AvisoDetalhesPage() {
               <NivelBadge nivel={aviso.nivel} />
             </div>
 
-            {/* Mensagem */}
             <div className="flex items-center justify-between py-4 border-b border-slate-100">
               <div className="flex items-center space-x-3">
                 <MessageSquare className="w-5 h-5 text-slate-500" />
@@ -157,7 +157,6 @@ export default function AvisoDetalhesPage() {
               )}
             </div>
 
-            {/* Criado */}
             <div className="flex items-center justify-between py-4">
               <div className="flex items-center space-x-3">
                 <Calendar className="w-5 h-5 text-slate-500" />
@@ -168,15 +167,13 @@ export default function AvisoDetalhesPage() {
           </CardContent>
         </Card>
 
-        {/* Actions */}
         <div className="mt-8 flex justify-center">
           <Button onClick={() => router.back()} variant="outline" className="border-slate-200 bg-transparent">
             Voltar para Lista de Avisos
           </Button>
         </div>
 
-        {/* Footer */}
-        <div className="text-center text-sm text-slate-500 mt-12">FnPix · © 2020 - 2025 ·</div>
+        
       </div>
     </div>
   )

@@ -12,34 +12,30 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { countriesMock, departmentsFullMock } from "@/data/departments-full-data"
-import type { CreateDepartmentData, PromoCode } from "@/types/departments-full"
+import { countriesMock, departmentsFullMock } from "@/modules/departamentos/data/departments-full-data"
+import { CreateDepartmentData, PromoCode } from "@/modules/departamentos/types/departments-full"
 
 export default function EditarDepartamentoPage() {
   const params = useParams()
   const router = useRouter()
-  const departmentId = Number.parseInt(params.id as string)
+
+  const idParam = Array.isArray(params?.id) ? params.id[0] : params?.id
+  const departmentId = idParam && !isNaN(Number(idParam)) ? Number(idParam) : null
+
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
   const [newPromoCode, setNewPromoCode] = useState({ code: "", value: "" })
 
-  const [formData, setFormData] = useState<CreateDepartmentData>({
-    name: "",
-    country: "",
-    timezone: "Europe/Madrid",
-    cutoffTime: "05:00",
-    supportContact: "",
-    supportContactType: "telefone",
-    workTimeSupport: "",
-    ksherMerchantId: "",
-    ksherKey: "",
-    promoCodesList: [],
-  })
+  const [formData, setFormData] = useState<CreateDepartmentData | null>(null)
 
-  // Carregar dados do departamento
   useEffect(() => {
-    const department = departmentsFullMock.find((d) => d.id === departmentId)
+    if (!departmentId) {
+      setFormData(null)
+      return
+    }
+
+    const department = departmentsFullMock.find((d) => d.id === departmentId) || null
     if (department) {
       setFormData({
         name: department.name,
@@ -51,10 +47,23 @@ export default function EditarDepartamentoPage() {
         workTimeSupport: department.workTimeSupport,
         ksherMerchantId: department.ksherMerchantId,
         ksherKey: department.ksherKey,
-        promoCodesList: department.promoCodesList,
+        promoCodesList: department.promoCodesList ?? [],
       })
+    } else {
+      setFormData(null)
     }
   }, [departmentId])
+
+  if (formData === null) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-6">
+        <h1 className="text-2xl font-bold mb-4 text-red-600">Departamento não encontrado</h1>
+        <Link href="/organizacao/departamentos" className="text-blue-600 hover:underline">
+          Voltar para lista de departamentos
+        </Link>
+      </div>
+    )
+  }
 
   const selectedCountry = countriesMock.find((c) => c.name === formData.country)
 
@@ -90,7 +99,7 @@ export default function EditarDepartamentoPage() {
   }
 
   const handleInputChange = (field: keyof CreateDepartmentData, value: any) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
+    setFormData((prev) => (prev ? { ...prev, [field]: value } : prev))
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: "" }))
     }
@@ -101,24 +110,31 @@ export default function EditarDepartamentoPage() {
       const promoCode: PromoCode = {
         id: Date.now().toString(),
         code: newPromoCode.code,
-        value: Number.parseFloat(newPromoCode.value),
+        value: Number.parseFloat(newPromoCode.value) || 0,
       }
-      setFormData((prev) => ({
-        ...prev,
-        promoCodesList: [...prev.promoCodesList, promoCode],
-      }))
+      setFormData((prev) =>
+        prev
+          ? {
+              ...prev,
+              promoCodesList: [...prev.promoCodesList, promoCode],
+            }
+          : prev
+      )
       setNewPromoCode({ code: "", value: "" })
       setIsPromoModalOpen(false)
     }
   }
 
   const handleRemovePromoCode = (id: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      promoCodesList: prev.promoCodesList.filter((code) => code.id !== id),
-    }))
+    setFormData((prev) =>
+      prev
+        ? {
+            ...prev,
+            promoCodesList: prev.promoCodesList.filter((code) => code.id !== id),
+          }
+        : prev
+    )
   }
-
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
       <div className="w-full max-w-4xl">

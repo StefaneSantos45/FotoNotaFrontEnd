@@ -185,7 +185,7 @@ const mockQuiosques: Quiosque[] = [
       predefinicaoLayout: "ATUALIZADOS",
       predefinicaoAnuncio: "falso",
       predefinicaoDocPhoto: "DOC BR",
-      pagamento: {
+      configuracaoPagamento: {
         preco: "R$ 10,00",
         precoFotoIdentificacao: "R$ 15,00",
         usarPrecoFlexivel: true,
@@ -212,12 +212,12 @@ const mockQuiosques: Quiosque[] = [
         usarMoedasAceitam: true,
         aceitandoMoedas: true,
       },
-      localidade: {
+      configuracaoLocalidade: {
         usarLocalidades: true,
         localidadePadrao: "portugues",
         locais: ["Inglês", "Português", "Brasileiro"],
       },
-      adicional: {
+      configuracaoAvancada: {
         atrasoReinicializacao: "300",
         redefinirExibicaoAtraso: "60",
         taxaPrincipalAtrasoReinicializacao: "120",
@@ -236,7 +236,7 @@ const mockQuiosques: Quiosque[] = [
           bottom: 48,
         },
       },
-      hardware: {
+      configuracaoHardware: {
         usarRegiao: true,
         regiao: "Brazil",
         usarAceitadorMoedas: true,
@@ -253,7 +253,7 @@ const mockQuiosques: Quiosque[] = [
         portoSemDinheiro: "COM1",
         serieSemDinheiro: "12345",
       },
-      localizacao: {
+      configuracaoLocalizacao: {
         usarHorarioFuncionamento: true,
         horarioFuncionamento: [
           { dia: "Segunda-feira", inicio: "09:00", fim: "18:00", ativo: true },
@@ -389,11 +389,11 @@ const mockQuiosques: Quiosque[] = [
       predefinicaoLayout: "ATUALIZADOS",
       predefinicaoAnuncio: "falso",
       predefinicaoDocPhoto: "DOC BR",
-      pagamento: {},
-      localidade: {},
-      adicional: {},
-      hardware: {},
-      localizacao: {},
+      configuracaoPagamento: {},
+      configuracaoLocalidade: {},
+      configuracaoAvancada: {},
+      configuracaoHardware: {},
+      configuracaoLocalizacao: {},
     },
     registroSessao: [],
     colecoes: [],
@@ -511,11 +511,11 @@ const mockQuiosques: Quiosque[] = [
       predefinicaoLayout: "ATUALIZADOS",
       predefinicaoAnuncio: "falso",
       predefinicaoDocPhoto: "DOC BR",
-      pagamento: {},
-      localidade: {},
-      adicional: {},
-      hardware: {},
-      localizacao: {},
+      configuracaoPagamento: {},
+      configuracaoLocalidade: {},
+      configuracaoAvancada: {},
+      configuracaoHardware: {},
+      configuracaoLocalizacao: {},
     },
     registroSessao: [],
     colecoes: [],
@@ -633,11 +633,11 @@ const mockQuiosques: Quiosque[] = [
       predefinicaoLayout: "ATUALIZADOS",
       predefinicaoAnuncio: "falso",
       predefinicaoDocPhoto: "DOC BR",
-      pagamento: {},
-      localidade: {},
-      adicional: {},
-      hardware: {},
-      localizacao: {},
+      configuracaoPagamento: {},
+      configuracaoLocalidade: {},
+      configuracaoAvancada: {},
+      configuracaoHardware: {},
+      configuracaoLocalizacao: {},
     },
     registroSessao: [],
     colecoes: [],

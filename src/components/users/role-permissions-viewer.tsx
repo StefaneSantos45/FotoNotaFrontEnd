@@ -6,8 +6,10 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { permissionCategories } from "@/data/permissions-data"
-import type { Role } from "@/types/user-management"
+
+
+import { permissionCategories } from "../../../data/permissions-data"
+import { Role } from "../../../types/user-management"
 
 interface RolePermissionsViewerProps {
   role: Role

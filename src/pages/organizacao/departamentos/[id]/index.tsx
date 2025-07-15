@@ -1,19 +1,29 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { ArrowLeft, Edit, Phone, MessageCircle, Tag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { departmentsFullMock } from "@/data/departments-full-data"
-import type { Department } from "@/types/departments-full"
+import { departmentsFullMock } from "@/modules/departamentos/data/departments-full-data"
+import { Department } from "@/modules/departamentos/types/departments-full"
 
 export default function DetalhesDepartamentoPage() {
   const params = useParams()
-  const departmentId = Number.parseInt(params.id as string)
-  const [department] = useState<Department | null>(departmentsFullMock.find((d) => d.id === departmentId) || null)
+  const departmentId = params?.id ? Number(params.id) : null
+
+  const [department, setDepartment] = useState<Department | null>(null)
+
+  useEffect(() => {
+    if (departmentId && departmentId > 0) {
+      const found = departmentsFullMock.find((d) => d.id === departmentId) || null
+      setDepartment(found)
+    } else {
+      setDepartment(null)
+    }
+  }, [departmentId])
 
   if (!department) {
     return (
@@ -29,6 +39,9 @@ export default function DetalhesDepartamentoPage() {
     )
   }
 
+  // Segurança extra para promoCodesList, caso seja opcional na interface
+  const promoCodesList = department.promoCodesList ?? []
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-4xl mx-auto">
@@ -41,7 +54,9 @@ export default function DetalhesDepartamentoPage() {
                   <ArrowLeft className="w-5 h-5 text-slate-600" />
                 </Button>
               </Link>
-              <h1 className="text-2xl font-semibold text-slate-800">Detalhes do departamento: {department.name}</h1>
+              <h1 className="text-2xl font-semibold text-slate-800">
+                Detalhes do departamento: {department.name}
+              </h1>
             </div>
             <Link href={`/organizacao/departamentos/${department.id}/editar`}>
               <Button className="bg-blue-600 hover:bg-blue-700 text-white">
@@ -55,64 +70,29 @@ export default function DetalhesDepartamentoPage() {
         {/* Detalhes do Departamento */}
         <Card className="border-0 shadow-sm bg-white">
           <CardContent className="p-6">
-            {/* Informações Básicas */}
             <div className="max-w-2xl mx-auto space-y-4">
-              <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                <span className="text-slate-600">EU IA</span>
-                <span className="text-slate-800 font-medium">{department.id}</span>
-              </div>
-
-              <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                <span className="text-slate-600">nome</span>
-                <span className="text-slate-800 font-medium">{department.name}</span>
-              </div>
-
-              <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                <span className="text-slate-600">País</span>
-                <span className="text-slate-800 font-medium">{department.country}</span>
-              </div>
-
-              <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                <span className="text-slate-600">Fuso horário</span>
-                <span className="text-slate-800 font-medium">{department.timezone}</span>
-              </div>
-
-              <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                <span className="text-slate-600">Horário de corte diurno</span>
-                <span className="text-slate-800 font-medium">{department.cutoffTime}</span>
-              </div>
-
-              <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                <span className="text-slate-600">Contato de suporte</span>
-                <span className="text-slate-800 font-medium">{department.supportContact || "—"}</span>
-              </div>
-
-              <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                <span className="text-slate-600">Tipo de contato de suporte</span>
-                <div className="flex items-center gap-2">
-                  {department.supportContactType === "whatsapp" ? (
-                    <MessageCircle className="w-4 h-4 text-green-600" />
-                  ) : (
-                    <Phone className="w-4 h-4 text-blue-600" />
-                  )}
-                  <span className="text-slate-800 font-medium">{department.supportContactType}</span>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                <span className="text-slate-600">Suporte ao Tempo de Trabalho</span>
-                <span className="text-slate-800 font-medium">{department.workTimeSupport || "—"}</span>
-              </div>
-
-              <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                <span className="text-slate-600">ID do comerciante Ksher</span>
-                <span className="text-slate-800 font-medium">{department.ksherMerchantId || "—"}</span>
-              </div>
-
-              <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                <span className="text-slate-600">Chave Ksher</span>
-                <span className="text-slate-800 font-medium">{department.ksherKey || "—"}</span>
-              </div>
+              <Item label="EU IA" value={department.id} />
+              <Item label="nome" value={department.name} />
+              <Item label="País" value={department.country} />
+              <Item label="Fuso horário" value={department.timezone} />
+              <Item label="Horário de corte diurno" value={department.cutoffTime} />
+              <Item label="Contato de suporte" value={department.supportContact || "—"} />
+              <Item
+                label="Tipo de contato de suporte"
+                value={
+                  <div className="flex items-center gap-2">
+                    {department.supportContactType === "whatsapp" ? (
+                      <MessageCircle className="w-4 h-4 text-green-600" />
+                    ) : (
+                      <Phone className="w-4 h-4 text-blue-600" />
+                    )}
+                    <span className="text-slate-800 font-medium">{department.supportContactType}</span>
+                  </div>
+                }
+              />
+              <Item label="Suporte ao Tempo de Trabalho" value={department.workTimeSupport || "—"} />
+              <Item label="ID do comerciante Ksher" value={department.ksherMerchantId || "—"} />
+              <Item label="Chave Ksher" value={department.ksherKey || "—"} />
 
               {/* Lista de códigos promocionais rápidos */}
               <div className="space-y-4 pt-4">
@@ -120,9 +100,9 @@ export default function DetalhesDepartamentoPage() {
                   <span className="text-slate-600">Lista de códigos promocionais rápidos</span>
                 </div>
 
-                {department.promoCodesList.length > 0 ? (
+                {promoCodesList.length > 0 ? (
                   <div className="space-y-4">
-                    {department.promoCodesList.map((promo, index) => (
+                    {promoCodesList.map((promo, index) => (
                       <div key={promo.id} className="space-y-2">
                         <div className="flex justify-between items-center py-2">
                           <div className="flex items-center gap-3">
@@ -151,6 +131,15 @@ export default function DetalhesDepartamentoPage() {
           </CardContent>
         </Card>
       </div>
+    </div>
+  )
+}
+
+function Item({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex justify-between items-center py-3 border-b border-slate-100">
+      <span className="text-slate-600">{label}</span>
+      <span className="text-slate-800 font-medium">{value}</span>
     </div>
   )
 }

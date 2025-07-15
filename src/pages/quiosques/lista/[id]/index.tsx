@@ -17,22 +17,27 @@ export default function QuiosqueDetalhesPage() {
   const [quiosque, setQuiosque] = useState<Quiosque | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const id = typeof params?.id === "string" ? params.id : null
+
   useEffect(() => {
     const fetchQuiosque = async () => {
-      if (params.id) {
-        try {
-          const quiosqueData = await getQuiosqueById(params.id as string)
-          setQuiosque(quiosqueData)
-        } catch (error) {
-          console.error("Erro ao carregar quiosque:", error)
-        } finally {
-          setLoading(false)
-        }
+      if (!id) {
+        setLoading(false)
+        return
+      }
+
+      try {
+        const quiosqueData = await getQuiosqueById(id)
+        setQuiosque(quiosqueData)
+      } catch (error) {
+        console.error("Erro ao carregar quiosque:", error)
+      } finally {
+        setLoading(false)
       }
     }
 
     fetchQuiosque()
-  }, [params.id, getQuiosqueById])
+  }, [id, getQuiosqueById])
 
   if (loading) {
     return (
@@ -42,13 +47,13 @@ export default function QuiosqueDetalhesPage() {
     )
   }
 
-  if (!quiosque) {
+  if (!id || !quiosque) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-slate-800 mb-2">Quiosque não encontrado</h2>
-          <p className="text-slate-600 mb-4">O quiosque solicitado não foi encontrado.</p>
-          <Button onClick={() => router.back()}>Voltar</Button>
+          <p className="text-slate-600 mb-4">O quiosque solicitado não foi encontrado ou o ID está inválido.</p>
+          <Button onClick={() => router.push("/quiosques")}>Voltar</Button>
         </div>
       </div>
     )
@@ -155,8 +160,7 @@ export default function QuiosqueDetalhesPage() {
         {/* Quiosque Details Tabs */}
         <QuiosqueDetailsTabs quiosque={quiosque} />
 
-        {/* Footer */}
-        <div className="text-center text-sm text-slate-500 mt-12">FnPix · © 2020 - 2025 ·</div>
+        
       </div>
     </div>
   )

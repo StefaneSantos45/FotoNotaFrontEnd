@@ -1,31 +1,79 @@
 "use client"
 
-import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { ArrowLeft, Edit, Plus, Download, Search, Eye, Trash2 } from "lucide-react"
+import { useMemo, useState} from "react"
+import {
+  ArrowLeft,
+  Edit,
+  Plus,
+  Download,
+  Search,
+  Eye,
+  Trash2,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { PermissionGuard, ProtectedRoute } from "@/modules/auth/components"
-import { gruposData, moldurasData } from "@/modules/grupos/data/gruposData"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  PermissionGuard,
+  ProtectedRoute,
+} from "@/modules/auth/components"
+import {
+  gruposData,
+  moldurasData,
+} from "@/modules/grupos/data/gruposData"
 
 export default function DetalhesGrupoPage() {
   const params = useParams()
   const router = useRouter()
-  const grupoId = Number.parseInt(params.id as string)
 
+  // Extrair id com validação segura
+  const grupoId = useMemo(() => {
+    if (!params?.id) return null
+    const parsed = Number(params.id)
+    return isNaN(parsed) ? null : parsed
+  }, [params])
+
+  // Estado local para searchTerm permanece
   const [searchTerm, setSearchTerm] = useState("")
+
+  if (!grupoId) {
+    return (
+      <ProtectedRoute>
+        <div className="flex items-center justify-center h-screen">
+          <p className="text-slate-600 text-lg">Carregando grupo...</p>
+        </div>
+      </ProtectedRoute>
+    )
+  }
 
   const grupo = gruposData.find((g) => g.id === grupoId)
   const molduras = moldurasData.filter((m) => m.grupoId === grupoId)
 
-  const filteredMolduras = molduras.filter(
-    (moldura) =>
-      moldura.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      moldura.categoria.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredMolduras = molduras.filter((moldura) =>
+    [moldura.nome, moldura.categoria].some((field) =>
+      field.toLowerCase().includes(searchTerm.toLowerCase())
+    )
   )
 
   if (!grupo) {
@@ -48,6 +96,7 @@ export default function DetalhesGrupoPage() {
       currency: "BRL",
     }).format(value)
   }
+
 
   return (
     <ProtectedRoute>

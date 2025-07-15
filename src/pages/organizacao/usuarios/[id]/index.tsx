@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { ArrowLeft, Edit, Search, Eye, Trash2, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -11,13 +11,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import Link from "next/link"
 import { RolePermissionsViewer } from "@/components/users/role-permissions-viewer"
 import { UserPermissionEditor } from "@/components/users/user-permission-editor"
-import type { Role } from "@/types/user-management"
+import { Role } from "../../../../../types/user-management"
 
 export default function DetalhesUsuarioPage() {
   const params = useParams()
-  const userId = Number.parseInt(params.id as string)
 
-  // Substituir os dados mock para corresponder à listagem
   const usuariosMock = [
     {
       id: 175,
@@ -113,10 +111,38 @@ export default function DetalhesUsuarioPage() {
     },
   ]
 
-  const [user, setUser] = useState(usuariosMock.find((u) => u.id === userId) || null)
+  const [user, setUser] = useState<typeof usuariosMock[0] | null>(null)
+  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [viewingRole, setViewingRole] = useState<Role | null>(null)
   const [editingRole, setEditingRole] = useState<Role | null>(null)
+
+  useEffect(() => {
+    if (!params.id || Array.isArray(params.id)) {
+      setUser(null)
+      setLoading(false)
+      return
+    }
+
+    const userId = Number.parseInt(params.id)
+    if (isNaN(userId)) {
+      setUser(null)
+      setLoading(false)
+      return
+    }
+
+    const foundUser = usuariosMock.find((u) => u.id === userId) || null
+    setUser(foundUser)
+    setLoading(false)
+  }, [params.id])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg text-slate-600">Carregando detalhes do usuário...</div>
+      </div>
+    )
+  }
 
   if (!user) {
     return (
@@ -151,7 +177,9 @@ export default function DetalhesUsuarioPage() {
       prev
         ? {
             ...prev,
-            roles: prev.roles.map((role) => (role.id === roleId ? { ...role, permissions: updatedPermissions } : role)),
+            roles: prev.roles.map((role) =>
+              role.id === roleId ? { ...role, permissions: updatedPermissions } : role,
+            ),
             updatedAt: new Date(),
           }
         : null,
@@ -169,7 +197,9 @@ export default function DetalhesUsuarioPage() {
             title={permissao.name}
           />
         ))}
-        {permissoes.length > 20 && <span className="text-xs text-gray-500 ml-1">+{permissoes.length - 20}</span>}
+        {permissoes.length > 20 && (
+          <span className="text-xs text-gray-500 ml-1">+{permissoes.length - 20}</span>
+        )}
       </div>
     )
   }
@@ -355,7 +385,7 @@ export default function DetalhesUsuarioPage() {
             </table>
           </div>
 
-          {/* Paginação */}
+          {/* Paginação (fixa por enquanto) */}
           <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" disabled>
@@ -408,4 +438,9 @@ export default function DetalhesUsuarioPage() {
       </Dialog>
     </div>
   )
+}
+export async function getServerSideProps() {
+  return {
+    props: {},
+  }
 }

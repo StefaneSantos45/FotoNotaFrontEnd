@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { RolePermissionsViewer } from "./role-permissions-viewer"
-import type { User, Role } from "@/types/user-management"
+import { Role, User } from "../../../types/user-management"
 
 interface UserRoleSelectorProps {
   user: User

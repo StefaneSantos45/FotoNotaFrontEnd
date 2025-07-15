@@ -1,42 +1,41 @@
 // STATUS
 
 export interface QuiosqueStatusItem {
-  type: string // "online", "offline", "printer", etc.
-  value: boolean
+  type: string; // "online", "offline", "printer", etc.
+  value: boolean;
 }
 
 // MEMÓRIA
 
 export interface MemoryUsage {
-  name: string
-  used: string
-  total: string
+  name: string;
+  used: string;
+  total: string;
 }
 
 // DISPOSITIVOS
 
 export interface DeviceProperty {
-  label: string
-  value: string | number | boolean | undefined
+  label: string;
+  value: string | number | boolean | undefined;
 }
 
 export interface DeviceStatus {
-  status: string
-  name: string
-  properties: DeviceProperty[]
+  status: string;
+  name: string;
+  properties: DeviceProperty[];
 }
 
 // CONFIGURAÇÕES
 
 export interface FonteFotoGeral {
-  instagram?: boolean
-  telefone?: boolean
-  facebook?: boolean
-  identificacao?: boolean
-  selfie?: boolean
-  eventoInstagram?: boolean
+  instagram?: boolean;
+  doTelefone?: boolean;
+  facebook?: boolean;
+  fotoIdentificacao?: boolean;
+  selfie?: boolean;
+  eventoInstagram?: boolean; 
 }
-
 export interface TipoUploadTelefone {
   rede?: boolean
   wifi?: boolean
@@ -55,14 +54,15 @@ export interface ConfiguracaoGeral {
 }
 
 export interface ConfiguracaoPagamento {
-  preco?: number
-  precoFotoIdentificacao?: number
+  preco?: string
+  precoFotoIdentificacao?: string
   usarPrecoFlexivel?: boolean
   oFlexPriceE?: boolean
+  precosEspeciais?: any[]
   usarCodigoPromocionalTroco?: boolean
   codigoPromocionalAlteracao?: boolean
   tipoPromocaoErroImpressao?: string
-  valorMinimoImpressao?: number
+  valorMinimoImpressao?: string
   usarPagamentosCodigoQr?: boolean
   pagamentosCodigoQr?: Record<string, boolean>
   usarNotasAceitas?: boolean
@@ -84,10 +84,10 @@ export interface ConfiguracaoAvancada {
   limiteMeoriaRenderizacao?: string
   usarMargem?: boolean
   margem?: {
-    left: string
-    right: string
-    top: string
-    bottom: string
+    left: number
+    right: number
+    top: number
+    bottom: number
   }
 }
 
@@ -132,12 +132,7 @@ export interface ConfiguracoesQuiosque {
   idQuiosque: string
   idLegado?: string
   departamento: string
-  fonteFoto: {
-    instagram: boolean
-    doTelefone: boolean
-    facebook: boolean
-    fotoIdentificacao: boolean
-  }
+  fonteFoto: FonteFotoGeral
   predefinicaoLayout: string
   predefinicaoAnuncio: string
   predefinicaoDocPhoto: string
@@ -153,81 +148,81 @@ export interface ConfiguracoesQuiosque {
 // QUIOSQUE PRINCIPAL
 
 export interface Quiosque {
-  id: string
-  nome: string
-  status: QuiosqueStatusItem[]
+  id: string;
+  nome: string;
+  status: QuiosqueStatusItem[];
   monitorMemoria?: {
-    value: string
-    timeAgo: string
-  }
-  quantidade: string
-  papel: number
-  funil: number
-  departamento: string
-  predefinicaoLayout: string
-  predefinicaoAnuncio: string
-  predefinicaoDocPhoto: string
+    value: string;
+    timeAgo: string;
+  };
+  quantidade: string;
+  papel: number;
+  funil: number;
+  departamento: string;
+  predefinicaoLayout: string;
+  predefinicaoAnuncio: string;
+  predefinicaoDocPhoto: string;
 
-  sessao?: string
-  ultimaTela?: string
+  sessao?: string;
+  ultimaTela?: string;
 
   statusDispositivo: {
     aceitadorMoedas: DeviceStatus & {
-      moeda: string
-      moedaInibirStr: string
-      debugPollCount: number
-      codigosCaminho: { code: string; moeda: string }[]
-    }
+      moeda: string;
+      moedaInibirStr: string;
+      debugPollCount: number;
+      codigosCaminho: { code: string; moeda: string }[];
+    };
     validadorBillet: DeviceStatus & {
-      moeda: string
-      moedaInibirStr: string
-      debugPollCount: number
-      codigosCaminho: { code: string; moeda: string }[]
-    }
+      moeda: string;
+      moedaInibirStr: string;
+      debugPollCount: number;
+      codigosCaminho: { code: string; moeda: string }[];
+    };
     funil: DeviceStatus & {
-      optoEstados: number
-      dispanceGlobalCounter: number
-      valorMoeda: number
-    }
+      optoEstados: number;
+      dispanceGlobalCounter: number;
+      valorMoeda: number;
+    };
     cortador: DeviceStatus & {
-      tipoConexao: string
-      estaCortandoAgora: boolean
-    }
+      tipoConexao: string;
+      estaCortandoAgora: boolean;
+    };
     controladorDispositivo: DeviceStatus & {
-      ultimoPing: number
-      revisaoSoftware: string
-    }
+      ultimoPing: number;
+      revisaoSoftware: string;
+    };
     impressoraDnp: DeviceStatus & {
-      statusNativo: string
-      contagemMidia: number
-    }
+      statusNativo: string;
+      contagemMidia: number;
+    };
     monitorMemoria: DeviceStatus & {
-      memoriaDetalhes: MemoryUsage[]
-      rss: string
-      heapTotal: string
-      pilhaUsada: string
-      externo: string
-      buffersArray: string
-    }
+      memoriaDetalhes: MemoryUsage[];
+      rss: string;
+      heapTotal: string;
+      pilhaUsada: string;
+      externo: string;
+      buffersArray: string;
+    };
     leitorCartaoBancario: DeviceStatus & {
-      tipoConexao: string
-    }
+      tipoConexao: string;
+    };
     navegador: DeviceStatus & {
-      versao: string
-      versaoPrincipal: number
-      protecaoDisco: string
-      chave: string
-    }
-  }
+      versao: string;
+      versaoPrincipal: number;
+      protecaoDisco: string;
+      chave: string;
+    };
+  };
 
-  configuracoes: ConfiguracoesQuiosque
+  configuracoes: ConfiguracoesQuiosque;
 
-  registroSessao: any[]
-  colecoes: any[]
+  registroSessao: any[];
+  colecoes: any[];
   comandos: {
-    tipo: string
-    status: string
-    criadoEm: string
-    usuario: string
-  }[]
+    tipo: string;
+    status: string;
+    criadoEm: string;
+    usuario: string;
+  }[];
 }

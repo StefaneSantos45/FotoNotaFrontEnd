@@ -45,26 +45,43 @@ interface Usuario {
 
 export default function DetalheFuncaoPage() {
   const params = useParams()
-  const funcaoId = Number.parseInt(params.id as string)
+  const idParam = params?.id
+  const funcaoId = idParam ? Number.parseInt(idParam as string) : NaN
 
+  // Busca a função no mock
   const funcao: Funcao | undefined = funcoesMock.find((f) => f.id === funcaoId)
-  const usuarios: Usuario[] = usuariosMock
 
+  // Estado para permissões editáveis, inicializa vazio se funcao undefined
+  const initialPermissions = funcao
+    ? funcao.permissoes.reduce((acc, perm) => {
+        acc[perm.id.toString()] = perm.ativo
+        return acc
+      }, {} as Record<string, boolean>)
+    : {}
+
+  const [editablePermissions, setEditablePermissions] = useState<Record<string, boolean>>(initialPermissions)
+
+  // Outros estados
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedUser, setSelectedUser] = useState("")
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [anexedUsers, setAnexedUsers] = useState<Usuario[]>([])
 
-  const [editablePermissions, setEditablePermissions] = useState<Record<string, boolean>>(
-    funcao?.permissoes.reduce((acc, perm) => {
-      acc[perm.id.toString()] = perm.ativo
-      return acc
-    }, {} as Record<string, boolean>) || {}
-  )
-
   if (!funcao) {
-    return <div>Função não encontrada</div>
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-slate-800 mb-2">Função não encontrada</h1>
+          <p className="text-slate-600 mb-4">A função solicitada não existe.</p>
+          <Link href="/outros/funcoes">
+            <Button>Voltar para funções</Button>
+          </Link>
+        </div>
+      </div>
+    )
   }
+
+  const usuarios: Usuario[] = usuariosMock
 
   const handleAnexarUsuario = () => {
     if (selectedUser) {
@@ -92,7 +109,7 @@ export default function DetalheFuncaoPage() {
       <div className="bg-white rounded-lg shadow-sm">
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center gap-4 mb-4">
-            <Link href="/outro/funcoes">
+            <Link href="/outros/funcoes">
               <Button variant="ghost" size="sm">
                 <ArrowLeft className="w-4 h-4" />
               </Button>
@@ -290,4 +307,11 @@ export default function DetalheFuncaoPage() {
       </div>
     </div>
   )
+}
+
+// Opcional: para build estático informar quais ids devem ser pré-renderizados
+export async function generateStaticParams() {
+  return funcoesMock.map((funcao) => ({
+    id: funcao.id.toString(),
+  }))
 }

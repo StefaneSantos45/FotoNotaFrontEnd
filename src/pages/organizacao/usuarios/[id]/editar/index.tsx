@@ -26,7 +26,10 @@ interface EditUserData {
 export default function EditarUsuarioPage() {
   const params = useParams()
   const router = useRouter()
-  const userId = Number.parseInt(params.id as string)
+
+  const idParam = typeof params?.id === "string" ? params.id : null
+  const userId = idParam ? Number.parseInt(idParam) : null
+
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -41,21 +44,23 @@ export default function EditarUsuarioPage() {
     newPassword: "",
   })
 
-  // Carregar dados do usuário
   useEffect(() => {
+    if (!userId) return
+
     const user = usersMock.find((u) => u.id === userId)
     if (user) {
       setFormData({
         name: user.name,
         email: user.email,
-        phoneNumber: "", // Adicionar campo telefone aos dados mock se necessário
-        departmentId: 1, // Mapear departamento do usuário
+        phoneNumber: "", // se necessário, adicione no mock
+        departmentId: 1,
         active: user.active,
         changePassword: false,
         newPassword: "",
       })
     }
   }, [userId])
+
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {}

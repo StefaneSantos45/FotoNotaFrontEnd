@@ -19,8 +19,8 @@ import {
   Plus,
 } from "lucide-react"
 import Link from "next/link"
-import { departmentsFullMock } from "@/data/departments-full-data"
-import type { Department } from "../../../../types/departments-full"
+import { Department } from "@/modules/departamentos/types/departments-full"
+import { departmentsFullMock } from "@/modules/departamentos/data/departments-full-data"
 
 export default function DepartamentosPage() {
   const [searchTerm, setSearchTerm] = useState("")

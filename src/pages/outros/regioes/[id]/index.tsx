@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+export const dynamic = "force-dynamic"
+
+import { useState, useEffect } from "react"
 import { useParams } from "next/navigation"
 import { ArrowLeft, Edit } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -11,8 +13,31 @@ import type { Regiao } from "../../../../../types/regioes"
 
 export default function DetalhesRegiaoPage() {
   const params = useParams()
-  const regiaoId = Number.parseInt(params.id as string)
-  const [regiao] = useState<Regiao | null>(regioesMock.find((r) => r.id === regiaoId) || null)
+  const [regiao, setRegiao] = useState<Regiao | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Verifica se params.id é string válida
+    if (!params?.id || typeof params.id !== "string") {
+      setLoading(false)
+      setRegiao(null)
+      return
+    }
+
+    const regiaoId = Number.parseInt(params.id)
+
+    const foundRegiao = regioesMock.find((r) => r.id === regiaoId) || null
+    setRegiao(foundRegiao)
+    setLoading(false)
+  }, [params?.id])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg text-slate-600">Carregando detalhes da região...</div>
+      </div>
+    )
+  }
 
   if (!regiao) {
     return (
@@ -20,7 +45,7 @@ export default function DetalhesRegiaoPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-slate-800 mb-2">Região não encontrada</h1>
           <p className="text-slate-600 mb-4">A região solicitada não existe.</p>
-          <Link href="/outro/regioes">
+          <Link href="/outros/regioes">
             <Button>Voltar para Regiões</Button>
           </Link>
         </div>
@@ -35,7 +60,7 @@ export default function DetalhesRegiaoPage() {
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Link href="/outro/regioes">
+              <Link href="/outros/regioes">
                 <Button variant="ghost" size="sm" className="p-2 hover:bg-slate-100 rounded-full">
                   <ArrowLeft className="w-5 h-5 text-slate-600" />
                 </Button>
@@ -98,7 +123,7 @@ export default function DetalhesRegiaoPage() {
 
             {regiao.aceitandoNotas.length > 0 ? (
               <div className="space-y-6">
-                {regiao.aceitandoNotas.map((nota, index) => (
+                {regiao.aceitandoNotas.map((nota) => (
                   <div key={nota.id} className="space-y-3">
                     <div className="flex items-center gap-2">
                       <span className="text-pink-600 font-medium">#{nota.numero}</span>
@@ -134,7 +159,7 @@ export default function DetalhesRegiaoPage() {
 
             {regiao.aceitandoMoedas.length > 0 ? (
               <div className="space-y-6">
-                {regiao.aceitandoMoedas.map((moeda, index) => (
+                {regiao.aceitandoMoedas.map((moeda) => (
                   <div key={moeda.id} className="space-y-3">
                     <div className="flex items-center gap-2">
                       <span className="text-pink-600 font-medium">#{moeda.numero}</span>

@@ -43,19 +43,19 @@ export default function TabConfigurations({ quiosque }: TabConfigurationsProps) 
             <span className="font-medium text-slate-600">Fonte da Foto:</span>
             <div className="grid grid-cols-2 gap-2 mt-2 text-xs">
               <div className="flex items-center space-x-2">
-                {renderBoolean(configuracoes.fonteFoto.instagram)}
+                {renderBoolean(configuracoes.fonteFoto.instagram ?? false)}
                 <span>Instagram</span>
               </div>
               <div className="flex items-center space-x-2">
-                {renderBoolean(configuracoes.fonteFoto.doTelefone)}
+                {renderBoolean(configuracoes.fonteFoto.doTelefone ?? false)}
                 <span>Do Telefone</span>
               </div>
               <div className="flex items-center space-x-2">
-                {renderBoolean(configuracoes.fonteFoto.facebook)}
+                {renderBoolean(configuracoes.fonteFoto.facebook ?? false)}
                 <span>Facebook</span>
               </div>
               <div className="flex items-center space-x-2">
-                {renderBoolean(configuracoes.fonteFoto.fotoIdentificacao)}
+                {renderBoolean(configuracoes.fonteFoto.fotoIdentificacao ?? false)}
                 <span>Foto para Identificação</span>
               </div>
             </div>
@@ -113,7 +113,7 @@ export default function TabConfigurations({ quiosque }: TabConfigurationsProps) 
                         <span>Instagram</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        {renderBoolean(configuracoes.configuracaoGeral?.fonteFoto?.telefone ?? false)}
+                        {renderBoolean(configuracoes.configuracaoGeral?.fonteFoto?.doTelefone ?? false)}
                         <span>Do Telefone</span>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -121,7 +121,7 @@ export default function TabConfigurations({ quiosque }: TabConfigurationsProps) 
                         <span>Facebook</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        {renderBoolean(configuracoes.configuracaoGeral?.fonteFoto?.identificacao ?? false)}
+                        {renderBoolean(configuracoes.configuracaoGeral?.fonteFoto?.fotoIdentificacao  ?? false)}
                         <span>Foto para Identificação</span>
                       </div>
                       <div className="flex items-center space-x-2">

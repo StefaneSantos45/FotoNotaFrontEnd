@@ -12,6 +12,7 @@ export interface Role {
   description: string;
   level: number;
   permissions: Permission[];
+  color?: string
 }
 
 export interface User {

@@ -9,8 +9,8 @@ import { Switch } from "@/components/ui/switch"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { permissionCategories } from "@/data/permissions-data"
-import type { Role } from "@/types/user-management"
+import { Role } from "../../../types/user-management"
+import { permissionCategories } from "../../../data/permissions-data"
 
 interface UserPermissionEditorProps {
   role: Role

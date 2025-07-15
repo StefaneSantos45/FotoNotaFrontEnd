@@ -12,8 +12,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { countriesMock } from "@/data/departments-full-data"
-import type { CreateDepartmentData, PromoCode } from "@/types/departments-full"
+import { countriesMock } from "@/modules/departamentos/data/departments-full-data"
+import { CreateDepartmentData, PromoCode } from "@/modules/departamentos/types/departments-full"
 
 export default function CriarDepartamentoPage() {
   const router = useRouter()
